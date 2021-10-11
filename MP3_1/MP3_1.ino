@@ -6,10 +6,16 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *Mright = AFMS.getMotor(4);
 Adafruit_DCMotor *Mleft = AFMS.getMotor(1);
 
-int sensor1 = 0;
-int sensor2 = 1;
-float Sright;
-float Sleft;
+int sensor1 = 0; //left
+int sensor2 = 1; //right
+int Sright;
+int Sleft;
+int threshold;
+
+float Mleft_move_speed = 30;
+float Mright_move_speed = 30;
+float Mleft_still_speed = 0;
+float Mright_still_speed = 0;
 
 unsigned int run_time;
 const int check_time = 50;
@@ -28,30 +34,45 @@ void loop() {
   // put your main code here, to run repeatedly:
   unsigned int t;
   t = millis();
+  threshold = 300;
 
   if (t >= run_time + check_time) {
-    Sright = analogRead(sensor1);
-    Sleft = analogRead(sensor2);
+    Sright = analogRead(sensor2);
+    Sleft = analogRead(sensor1);
     //Serial.println(a);
-    //delay(50);
+    //  delay(50);
 
-    if(Sright > 500 && Sleft < 500){  //Sright on line
-      Mleft->setSpeed(50);
+    if (Sright > threshold && Sleft < threshold){  //Sright on line
+      //Mleft->setSpeed(30);
+      Mleft->setSpeed(Mleft_move_speed);
       Mleft->run(FORWARD);
-      Mright->setSpeed(0);
+      Mright->setSpeed(Mright_still_speed);
       Mright->run(FORWARD);
+      //Serial.println(Sleft, Mleft_move_speed, Sright, Mright_still_speed);
+      Serial.println(Sleft, Sright);
+      delay(50);
     }
-    else if(Sright < 500 && Sleft > 500){  //Sleft on line
-      Mright->setSpeed(50);
+    else if(Sright < threshold && Sleft > threshold){  //Sleft on line
+      //Mright->setSpeed(30);
+      Mright->setSpeed(Mright_move_speed);
       Mright->run(FORWARD);
-      Mleft->setSpeed(0);
+      //Mleft->setSpeed(0);
+      Mleft->setSpeed(Mleft_still_speed);
       Mleft->run(FORWARD);
+      //Serial.println(Sleft, Mleft_still_speed, Sright, Mright_move_speed);
+      Serial.println(Sleft, Sright);
+      delay(50);
     }
-    else if(Sright < 500 && Sleft < 500){
-      Mleft->setSpeed(50);
+    else if(Sright < threshold && Sleft < threshold){
+      //Mleft->setSpeed(30);
+      Mleft->setSpeed(Mleft_move_speed);
       Mleft->run(FORWARD);
-      Mright->setSpeed(50);
+      //Mright->setSpeed(30);
+      Mright->setSpeed(Mright_move_speed);
       Mright->run(FORWARD);
+      //Serial.println(Sleft, Mleft_move_speed, Sright, Mright_move_speed);
+      Serial.println(Sleft, Sright);
+      delay(50);
     }
 
     //From Adafruit documentation, 0=stop, 255=full speed
