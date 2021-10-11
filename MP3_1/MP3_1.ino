@@ -8,8 +8,8 @@ Adafruit_DCMotor *Mleft = AFMS.getMotor(1);
 
 int sensor1 = 0; //left
 int sensor2 = 1; //right
-int Sright;
-int Sleft;
+float Sright;
+float Sleft;
 int threshold;
 
 float Mleft_move_speed = 30;
@@ -43,35 +43,61 @@ void loop() {
     //  delay(50);
 
     if (Sright > threshold && Sleft < threshold){  //Sright on line
-      //Mleft->setSpeed(30);
+      // Move left motor forward
       Mleft->setSpeed(Mleft_move_speed);
       Mleft->run(FORWARD);
       Mright->setSpeed(Mright_still_speed);
       Mright->run(FORWARD);
-      //Serial.println(Sleft, Mleft_move_speed, Sright, Mright_still_speed);
-      Serial.println(Sleft, Sright);
+      
+      // Print in format: (Sleft, Mleft, Sright, Mright)
+      Serial.print("(");
+      Serial.print(Sleft);
+      Serial.print(", ");
+      Serial.print(Mleft_move_speed);
+      Serial.print(", ");
+      Serial.println(Sright);
+      Serial.print(", ");
+      Serial.print(Mright_still_speed);
+      Serial.print(")\n");
       delay(50);
     }
+    
     else if(Sright < threshold && Sleft > threshold){  //Sleft on line
-      //Mright->setSpeed(30);
+      // Move right motor forward
       Mright->setSpeed(Mright_move_speed);
       Mright->run(FORWARD);
-      //Mleft->setSpeed(0);
       Mleft->setSpeed(Mleft_still_speed);
       Mleft->run(FORWARD);
-      //Serial.println(Sleft, Mleft_still_speed, Sright, Mright_move_speed);
-      Serial.println(Sleft, Sright);
+
+      // Print in format: (Sleft, Mleft, Sright, Mright)
+      Serial.print("(");
+      Serial.print(Sleft);
+      Serial.print(", ");
+      Serial.print(Mleft_still_speed);
+      Serial.print(", ");
+      Serial.println(Sright);
+      Serial.print(", ");
+      Serial.print(Mright_move_speed);
+      Serial.print(")\n");
       delay(50);
     }
     else if(Sright < threshold && Sleft < threshold){
-      //Mleft->setSpeed(30);
+      // Move both motors forward
       Mleft->setSpeed(Mleft_move_speed);
       Mleft->run(FORWARD);
-      //Mright->setSpeed(30);
       Mright->setSpeed(Mright_move_speed);
       Mright->run(FORWARD);
-      //Serial.println(Sleft, Mleft_move_speed, Sright, Mright_move_speed);
-      Serial.println(Sleft, Sright);
+      
+      // Print in format: (Sleft, Mleft, Sright, Mright)
+      Serial.print("(");
+      Serial.print(Sleft);
+      Serial.print(", ");
+      Serial.print(Mleft_move_speed);
+      Serial.print(", ");
+      Serial.println(Sright);
+      Serial.print(", ");
+      Serial.print(Mright_move_speed);
+      Serial.print(")\n");
       delay(50);
     }
 
