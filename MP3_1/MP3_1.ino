@@ -6,12 +6,13 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *Mright = AFMS.getMotor(4);
 Adafruit_DCMotor *Mleft = AFMS.getMotor(1);
 
-int sensor1 = 0; //left
-int sensor2 = 1; //right
-float Sright;
-float Sleft;
-int threshold;
+int sensor1 = 0; // left IR sensor
+int sensor2 = 1; // right IR sensor
+float Sright;    // right sensor value
+float Sleft;     // left sensor value
+int threshold;   // IR value threshold used to determine if sensor is on ground or on tape
 
+// define motor speeds for various cases
 float Mleft_move_speed = 30;
 float Mright_move_speed = 30;
 float Mleft_still_speed = 0;
@@ -42,13 +43,13 @@ void loop() {
     //Serial.println(a);
     //  delay(50);
 
-    if (Sright > threshold && Sleft < threshold){  //Sright on line
-      // Move left motor forward
+    if (Sright > threshold && Sleft < threshold) { //Sright on line
+      // Move left motor forward, turn off right motor
       Mleft->setSpeed(Mleft_move_speed);
       Mleft->run(FORWARD);
       Mright->setSpeed(Mright_still_speed);
       Mright->run(FORWARD);
-      
+
       // Print in format: (Sleft, Mleft, Sright, Mright)
       Serial.print("(");
       Serial.print(Sleft);
@@ -61,9 +62,9 @@ void loop() {
       Serial.print(")\n");
       delay(50);
     }
-    
-    else if(Sright < threshold && Sleft > threshold){  //Sleft on line
-      // Move right motor forward
+
+    else if (Sright < threshold && Sleft > threshold) { //Sleft on line
+      // Move right motor forward, turn off left motor
       Mright->setSpeed(Mright_move_speed);
       Mright->run(FORWARD);
       Mleft->setSpeed(Mleft_still_speed);
@@ -81,13 +82,13 @@ void loop() {
       Serial.print(")\n");
       delay(50);
     }
-    else if(Sright < threshold && Sleft < threshold){
+    else if (Sright < threshold && Sleft < threshold) {
       // Move both motors forward
       Mleft->setSpeed(Mleft_move_speed);
       Mleft->run(FORWARD);
       Mright->setSpeed(Mright_move_speed);
       Mright->run(FORWARD);
-      
+
       // Print in format: (Sleft, Mleft, Sright, Mright)
       Serial.print("(");
       Serial.print(Sleft);
@@ -102,10 +103,10 @@ void loop() {
     }
 
     //From Adafruit documentation, 0=stop, 255=full speed
-//    Mright->setSpeed(50);
-//    Mright->run(FORWARD);
-//    Mleft->setSpeed(50);
-//    Mleft->run(FORWARD);
+    //    Mright->setSpeed(50);
+    //    Mright->run(FORWARD);
+    //    Mleft->setSpeed(50);
+    //    Mleft->run(FORWARD);
 
     run_time = t;
   }
