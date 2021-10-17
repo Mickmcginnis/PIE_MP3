@@ -19,8 +19,8 @@ int scan_threshold = 1; // number of times the robot calls the move forward func
 // define motor speeds for various cases
 float Mleft_move_speed = 60;
 float Mright_move_speed = 60;
-float Mleft_still_speed = 30;
-float Mright_still_speed = 30;
+float Mleft_still_speed = 0;
+float Mright_still_speed = 0;
 uint8_t rundirection = BACKWARD;
 
 unsigned int run_time;
