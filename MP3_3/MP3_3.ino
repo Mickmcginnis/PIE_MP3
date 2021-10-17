@@ -11,10 +11,10 @@ int sensor2 = 1; // right IR sensor
 float Sright;    // right sensor value
 float Sleft;     // left sensor value
 int threshold = 300;   // IR value threshold used to determine if sensor is on ground or on tape
-//int delaytime = 20;
+
 int empty_count = 0;
 int turn_case = 0; // was the robot turning right (1), left (2), or forward (3)?
-int scan_threshold = 2; // number of times the robot calls the move forward function before it starts scanning for the line
+int scan_threshold = 1; // number of times the robot calls the move forward function before it starts scanning for the line
 
 // define motor speeds for various cases
 float Mleft_move_speed = 60;
@@ -36,6 +36,24 @@ void setup() {
   run_time = millis();
 }
 
+// Define function: Turn right
+void turnRight(){
+  // Move left motor forward, move right motor backwards
+  Mleft->setSpeed(Mleft_move_speed);
+  Mleft->run(FORWARD);
+  Mright->setSpeed(Mright_still_speed);
+  Mright->run(rundirection);
+}
+
+// Define function: Turn left
+void turnLeft(){
+  // Move right motor forward, move left motor backwards
+  Mright->setSpeed(Mright_move_speed);
+  Mright->run(FORWARD);
+  Mleft->setSpeed(Mleft_still_speed);
+  Mleft->run(rundirection);
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
   unsigned int t;
@@ -49,11 +67,7 @@ void loop() {
     //  delay(50);
 
     if (Sright > threshold && Sleft < threshold) { //Sright on line
-      // Move left motor forward, turn off right motor
-      Mleft->setSpeed(Mleft_move_speed);
-      Mleft->run(FORWARD);
-      Mright->setSpeed(Mright_still_speed);
-      Mright->run(rundirection);
+      turnRight();
 
       turn_case = 1; // robot is turning right
       empty_count = 0; // robot has escaped the scan and hit the line
@@ -72,11 +86,7 @@ void loop() {
     }
 
     else if (Sright < threshold && Sleft > threshold) { //Sleft on line
-      // Move right motor forward, turn off left motor
-      Mright->setSpeed(Mright_move_speed);
-      Mright->run(FORWARD);
-      Mleft->setSpeed(Mleft_still_speed);
-      Mleft->run(rundirection);
+      turnLeft();
 
       turn_case = 2; // robot is turning left
       empty_count = 0; // robot has escaped the scan and hit the line
@@ -94,20 +104,12 @@ void loop() {
       //delay(20);
     }
     else if (Sright < threshold && Sleft < threshold) {
-      if (empty_count > 0) {
+      if (empty_count >= scan_threshold) {
         if (turn_case == 1) { // continue turning to the right
-          // Move left motor forward, turn off right motor
-          Mleft->setSpeed(Mleft_move_speed);
-          Mleft->run(FORWARD);
-          Mright->setSpeed(Mright_still_speed);
-          Mright->run(rundirection);
+          turnRight();
         }
         else if (turn_case == 2) {
-          // Move right motor forward, turn off left motor
-          Mright->setSpeed(Mright_move_speed);
-          Mright->run(FORWARD);
-          Mleft->setSpeed(Mleft_still_speed);
-          Mleft->run(rundirection);
+         turnLeft();
         }
       }
       else {
