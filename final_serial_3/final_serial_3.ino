@@ -19,10 +19,10 @@ int turn_case = 0; // was the robot turning right (1), left (2), or forward (3)?
 int scan_threshold = 1; // number of times the robot calls the move forward function before it starts scanning for the line
 
 // define motor speeds for various cases
-float Mleft_move_speed = 60;
-float Mright_move_speed = 60;
-float Mleft_still_speed = 0;
-float Mright_still_speed = 0;
+int Mleft_move_speed = 60;
+int Mright_move_speed = 60;
+int Mleft_still_speed = 0;
+int Mright_still_speed = 0;
 uint8_t rundirection = BACKWARD;
 
 unsigned int run_time;
@@ -110,7 +110,7 @@ void loop() {
       Mleft_move_speed = x/10;
       Mright_move_speed = x/10;
       }
-    if ((x % 1) == 1) {
+    if ((x % 10) == 1) {
       threshold = (x-1)/10;
       }
   }
