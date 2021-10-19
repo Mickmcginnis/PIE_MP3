@@ -4,32 +4,15 @@ import time
 arduino = serial.Serial(port = '/dev/cu.usbmodem1101', baudrate=9600, timeout=0)
 time.sleep(2)
 
+print ("Enter new speed or threshold value. To change the motor speed, enter new speed as a whole number value followed by a 0 (e.g., to change the motor speed to 80, enter 800). To change the IR reflectance sensor threshold, enter the new threshold as a whole number value followed by a 1 (e.g., to change the threshold to 250, enter 2501)."
+        )
 while True:
 
-    print ("Enter new speed or threshold value: ")
+    print("Enter new speed or threshold value:")
 
     var = str(input())
     print ("You Entered :", var)
 
+    # write code to arduino port
     arduino.write(str.encode(var))
-    # print("New threshold: {}".format(var))
     time.sleep(1)
-
-    # if(var[0:2] == 's: '):
-    #     arduino.write(str.encode('{}'.format(var)))
-    #     print("Change motorspeed to {}".format(var[3::]))
-    #     time.sleep(1)
-
-    # if(var[0:2] == 't: '):
-    #     arduino.write(str.encode('{}'.format(var)))
-    #     print("Change threshold to {}".format(var[3::]))
-    #     time.sleep(1)
-
-    # if(var == '3'):
-    #     arduino.write(str.encode('3'))
-    #     print("LED turned on")
-    #     time.sleep(1)
-
-    # if(var == '4'):
-    #     arduino.write(str.encode('4'))
-    #     print("LED turned off")
