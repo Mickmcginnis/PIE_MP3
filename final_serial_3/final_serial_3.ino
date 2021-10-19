@@ -14,7 +14,7 @@ int threshold = 300;   // IR value threshold used to determine if sensor is on g
 int motorLeftValue;
 int motorRightValue;
 
-int empty_count = 0;
+int empty_count = 0;  //increases by 1 when line is not detected (both sensors off tape); resets to 0 in other cases
 int turn_case = 0; // was the robot turning right (1), left (2), or forward (3)?
 int scan_threshold = 1; // number of times the robot calls the move forward function before it starts scanning for the line
 
