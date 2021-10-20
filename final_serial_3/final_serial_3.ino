@@ -14,7 +14,7 @@ int threshold = 300;   // IR value threshold used to determine if sensor is on g
 int motorLeftValue;
 int motorRightValue;
 
-int empty_count = 0;  //increases by 1 when line is not detected (both sensors off tape); resets to 0 in other cases
+int forward_count = 0;  //increases by 1 when line is not detected (both sensors off tape); resets to 0 in other cases
 int turn_case = 0; // records the most recent turn direction, right (1) or left (2), before robot started moving forward
 int scan_threshold = 1; // number of times the robot calls the move forward function before it starts scanning for the line
 
@@ -116,7 +116,7 @@ void loop() {
       turnRight();
 
       turn_case = 1; // robot is turning right
-      empty_count = 0; // robot has escaped the scan and hit the line
+      forward_count = 0; // robot has escaped the scan and hit the line
 
       serialComms();
     }
@@ -125,7 +125,7 @@ void loop() {
       turnLeft();
 
       turn_case = 2; // robot is turning left
-      empty_count = 0; // robot has escaped the scan and hit the line
+      forward_count = 0; // robot has escaped the scan and hit the line
 
       serialComms();
     }
@@ -134,7 +134,7 @@ void loop() {
       // both sensors are off the line
 
 
-      if (empty_count >= scan_threshold) {
+      if (forward_count >= scan_threshold) {
         // if the robot has driven forward for more loops than the scan threshold,
         // go back to turning in the most recent direction. This helps the robot navigate around sharp corners
         if (turn_case == 1) { // continue turning to the right
@@ -145,13 +145,13 @@ void loop() {
         }
       }
       else {
-        // if empty_count >= scan_threshold is false (empty_count < scan_threshold),
+        // if forward_count >= scan_threshold is false (forward_count < scan_threshold),
         // robot has not been going forward for very long, and we can keep driving forward
         // Move both motors forward
         driveForward();
 
-        // add one to the value of empty_count; tracks how many times in a row the robot has gone forward
-        empty_count ++;
+        // add one to the value of forward_count; tracks how many times in a row the robot has gone forward
+        forward_count ++;
       }
 
       serialComms();
